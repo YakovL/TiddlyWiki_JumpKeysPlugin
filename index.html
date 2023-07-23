@@ -1520,7 +1520,7 @@ if(!isAbove2_9_3) {
 <div title="TiddlerInFilePlugin" creator="Yakov Litvin" modifier="Yakov Litvin" created="202307230632" tags="systemConfig" changecount="1">
 <pre>/***
 |Description|Allows to store any number of tiddlers as external files and more|
-|Version|1.1.2|
+|Version|1.1.2*|
 |Source      |https://github.com/YakovL/TiddlyWiki_TiddlerInFilePlugin/blob/master/TiddlerInFilePlugin.js|
 |Author      |Yakov Litvin|
 |License     |[[MIT|https://github.com/YakovL/TiddlyWiki_YL_ExtensionsCollection/blob/master/Common%20License%20(MIT)]]|
@@ -1703,6 +1703,8 @@ config.macros.external = {
 			eval(tiddler.text)
 			// for plugins introducing macros, formatters etc (may be adjusted in the future)
 			story.refreshAllTiddlers()
+			// apply CSS
+			store.notifyAll()
 		}
 		//meta.lastLoaded = responseText
 	},
