@@ -255,9 +255,8 @@ merge(config.jumper, {
 config.shadowTiddlers['JumpKeysStyleSheet'] = config.jumper.css
 config.shadowTiddlers['JumpKeysSettings'] = JSON.stringify(config.jumper.defaultCommandsKeys, null, 2)
 
-// reinstall-safe hijacking
-if(!config.jumper.orig_story_onTiddlerKeyPress) {
-	config.jumper.orig_story_onTiddlerKeyPress = story.onTiddlerKeyPress
+// reinstall-safe decorating and setting handlers
+if(!config.jumper.orig_story_displayTiddler) {
 	config.jumper.orig_story_displayTiddler = story.displayTiddler
 
 	store.addNotification('JumpKeysStyleSheet', refreshStyles)
