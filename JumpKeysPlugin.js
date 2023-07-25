@@ -8,7 +8,11 @@
 The plugin works more or less like the tab switching in a browser: press {{{ctrl + j}}} or the "jump" command in tiddler toolbar to open the jumping interface and:
 * hold {{{ctrl}}} and press {{{j}}} or ↑/↓ arrows to select a tiddler;
 * unhold {{{ctrl}}} or click a row to jump.
-TODO: explain other hotkeys/and features of UI
+It also substitutes the jump toolbar command dropdown with the same jumper interface.
+
+As a development if the idea, it also supports hotkeys for some other actions on the selected tiddler. Currently, they are:
+* {{{x}}} to close the selected tiddler;
+* {{{e}}} to edit it.
 ***/
 //{{{
 if(!config.jumper) config.jumper = {};
