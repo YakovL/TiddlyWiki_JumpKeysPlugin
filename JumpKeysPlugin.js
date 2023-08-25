@@ -6,11 +6,11 @@
 |License    |[[MIT|https://github.com/YakovL/TiddlyWiki_YL_ExtensionsCollection/blob/master/Common%20License%20(MIT)]]|
 !!!Usage
 The plugin works more or less like the tab switching in a browser: press {{{ctrl + j}}} or the "jump" command in tiddler toolbar to open the jumping interface and:
-* hold {{{ctrl}}} and press {{{j}}} or ↑/↓ arrows to select a tiddler;
+* hold {{{ctrl}}} and press {{{j}}} or ↑/↓ arrows to select a tiddler (if more than one is open);
 * unhold {{{ctrl}}} or click a row to jump.
 It also substitutes the jump toolbar command dropdown with the same jumper interface.
 
-As a development if the idea, it also supports hotkeys for some other actions on the selected tiddler. Currently, they are:
+As a development of the idea, it also supports hotkeys for some other actions on the tiddler, selected in the jumping interface. Currently, they are:
 * {{{x}}} to close the selected tiddler;
 * {{{e}}} to edit it.
 ***/
