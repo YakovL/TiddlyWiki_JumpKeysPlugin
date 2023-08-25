@@ -195,7 +195,7 @@ merge(config.jumper, {
 		const json = store.getTiddlerText('JumpKeysSettings')
 		try {
 			return JSON.parse(json)
-		} catch {
+		} catch (error) {
 			//# how/where to notify? ..probably after modifying JumpKeysSettings
 			// return this.defaultCommandsKeys
 		}
