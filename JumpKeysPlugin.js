@@ -15,7 +15,7 @@ As a development of the idea, it also supports hotkeys for some other actions on
 * {{{e}}} to edit it.
 ***/
 //{{{
-if(!config.jumper) config.jumper = {};
+if(!config.jumper) config.jumper = {}
 merge(config.jumper, {
 	getOpenTiddlersData: function() {
 		const list = []
@@ -79,12 +79,12 @@ merge(config.jumper, {
 	},
 	sortInAccordWithTouchedTiddlersStack: function(itemsWithTitles) {
 		for(var i = 0; i < this.touchedTiddlersStack.length; i++) {
-			var touchedTitle = this.touchedTiddlersStack[i].title;
+			var touchedTitle = this.touchedTiddlersStack[i].title
 			for(var j = 0; j < itemsWithTitles.length; j++)
 				if(itemsWithTitles[j].title == touchedTitle)
 					itemsWithTitles.unshift(
 						itemsWithTitles.splice(j, 1)[0]
-					);
+					)
 		}
 	},
 
@@ -115,8 +115,7 @@ merge(config.jumper, {
 		const $modal = jQuery(this.modal)
 			.empty()
 		const list = createTiddlyElement(this.modal, 'div', null, this.modalClass + '__list')
-		
-		
+
 		//# find where are we (inside an editor; focus inside tiddlerElement;
 		//  scroll between .. and ..)
 			for(let i = 0; i < openTiddlersData.length; i++) {
@@ -264,7 +263,7 @@ if(!config.jumper.orig_story_displayTiddler) {
 	config.jumper.orig_story_displayTiddler = story.displayTiddler
 
 	store.addNotification('JumpKeysStyleSheet', refreshStyles)
-	store.addNotification("ColorPalette", (smth, doc) => refreshStyles('JumpKeysStyleSheet', doc))
+	store.addNotification("ColorPalette", (unused, doc) => refreshStyles('JumpKeysStyleSheet', doc))
 
 	jQuery(document)
 		.on('click', event => {
