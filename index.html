@@ -1714,6 +1714,8 @@ config.macros.external = {
 			// for plugins introducing macros, formatters etc (may be adjusted in the future)
 			story.refreshAllTiddlers()
 			refreshAll()
+			// apply CSS
+			store.notifyAll()
 		}
 		//meta.lastLoaded = responseText
 	},
