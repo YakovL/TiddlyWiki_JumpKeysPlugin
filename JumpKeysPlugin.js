@@ -2,7 +2,7 @@
 |Description|Adds an interface and hotkeys for jumping between tiddlers and more|
 |Source     |https://github.com/YakovL/TiddlyWiki_JumpKeysPlugin/blob/master/JumpKeysPlugin.js|
 |Author     |Yakov Litvin|
-|Version    |1.2.1|
+|Version    |1.2.2|
 |License    |[[MIT|https://github.com/YakovL/TiddlyWiki_YL_ExtensionsCollection/blob/master/Common%20License%20(MIT)]]|
 !!!Usage
 The plugin works more or less like the tab switching in a browser: press {{{ctrl + j}}} or the "jump" command in tiddler toolbar to open the jumping interface and:
@@ -291,16 +291,11 @@ story.displayTiddler = function(srcElement, tiddler, template, animate, unused, 
 	return config.jumper.orig_story_displayTiddler.apply(this, arguments)
 }
 
-// once a tiddler editor is focused, add it to the history top
-// (this doesn't cover other editors yet, like CodeMirror or WYSIWYG)
-config.macros.edit.handler = config.macros.edit.handler = function() {
-	const editor = config.jumper.orig_editHandler.apply(this, arguments)
-	const tiddler = arguments[5]
-	editor.addEventListener('focus', () => {
-		config.jumper.pushTouchedTiddler({ title: tiddler.title })
-	})
-	return editor
-}
+// once an element is focused in a tiddler, add the latter to the history top
+jQuery(document).on('focusin', '.tiddler', (event) => {
+	const $tiddler = jQuery(event.currentTarget)
+	config.jumper.pushTouchedTiddler({ title: $tiddler.attr('tiddler') })
+})
 //}}}
 /***
 !!!Jumper styles
