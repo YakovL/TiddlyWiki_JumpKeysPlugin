@@ -47,11 +47,16 @@ merge(config.jumper, {
 			// works with CodeMirror as well!
 			$editor.focus()
 		} else {
-			window.scrollTo(0, ensureVisible(tiddlerData.element))
-			// remove focus from element edited previously
-			// (also fixes a problem with handsontable that steals focus on pressing ctrl)
-			// will be substitited with focusing an editor when one is to be focused
-			if(document.activeElement) document.activeElement.blur()
+			const $title = jQuery(tiddlerData.element).find('.title')
+			if($title[0] && $title[0].tabIndex > -1) {
+				$title.focus()
+			} else {
+				window.scrollTo(0, ensureVisible(tiddlerData.element))
+				// remove focus from element edited previously
+				// (also fixes a problem with handsontable that steals focus on pressing ctrl)
+				// will be substitited with focusing an editor when one is to be focused
+				if(document.activeElement) document.activeElement.blur()
+			}
 		}
 		this.pushTouchedTiddler({ title: tiddlerData.title })
 	},
