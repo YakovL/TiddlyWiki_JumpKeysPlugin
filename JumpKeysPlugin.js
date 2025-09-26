@@ -128,11 +128,11 @@ merge(config.jumper, {
 					this.itemClass + (i != 1 ? '' :
 					' ' + this.selectedItemClass) +
 					(openTiddlersData[i].isShadow ?
-						' ' + this.itemClass + '_shadow' :
-						openTiddlersData[i].isMissing ?
-						' ' + this.itemClass + '_missing' : '') +
-						(openTiddlersData[i].isEditable ? 
-						' ' + this.itemClass + '_editable' : ''),
+					 ' ' + this.itemClass + '_shadow' :
+					 openTiddlersData[i].isMissing ?
+					 ' ' + this.itemClass + '_missing' : '') +
+					 (openTiddlersData[i].isEditable ? 
+					 ' ' + this.itemClass + '_editable' : ''),
 					openTiddlersData[i].title)
 				listItem.onclick = () => {
 					this.selectByIndex(i)
@@ -185,10 +185,10 @@ merge(config.jumper, {
 		this.jumpToAnOpenTiddler(index)
 		this.hideJumper()
 	},
-	handleKeydown: function(e) {
+	handleKeydown: function($event) {
 		const self = config.jumper
-		if(e.key === 'Control') self.isCtrlHold = true
-		if(self.isCtrlHold) self.handleKeydownOnCtrlHold(e)
+		if($event.key === 'Control') self.isCtrlHold = true
+		if(self.isCtrlHold) self.handleKeydownOnCtrlHold($event)
 	},
 	// next: make configurable via UI
 	defaultCommandsKeys: {
@@ -204,17 +204,17 @@ merge(config.jumper, {
 			// return this.defaultCommandsKeys
 		}
 	},
-	handleKeyup: function(e) {
+	handleKeyup: function($event) {
 		const self = config.jumper
 
-		if(e.key === 'Control') {
+		if($event.key === 'Control') {
 			self.isCtrlHold = false
 			self.hideJumperAndJump()
 			return
 		}
 
-		const normalizedKeyCode = !e.originalEvent.code ? null :
-			/^(Key)?(\w+)$/.exec(e.originalEvent.code)[2].toLowerCase()
+		const normalizedKeyCode = !$event.originalEvent.code ? null :
+			/^(Key)?(\w+)$/.exec($event.originalEvent.code)[2].toLowerCase()
 
 		const commandsKeys = self.getCommandsKeys()
 		if(self.isCtrlHold && self.isJumperOpen() && normalizedKeyCode in commandsKeys) {
@@ -228,27 +228,27 @@ merge(config.jumper, {
 				self.refreshJumper()
 				self.selectByIndex(index < numberOfOpen ? index : index - 1)
 			}
-			if(e.preventDefault) e.preventDefault()
+			if($event.preventDefault) $event.preventDefault()
 			return false // prevent _
 		}
 	},
-	handleKeydownOnCtrlHold: function(e) {
+	handleKeydownOnCtrlHold: function($event) {
 		// make this work in different keyboard locale layouts:
-		if(e.originalEvent.code == "KeyJ") {
+		if($event.originalEvent.code == "KeyJ") {
 			if(!this.showJumper()) this.selectNext()
-			if(e.preventDefault) e.preventDefault()
+			if($event.preventDefault) $event.preventDefault()
 			return false // prevent _
 		}
 		if(!this.isJumperOpen()) return
 
-		switch(e.key) {
+		switch($event.key) {
 			case 'ArrowUp':   this.selectPrev(); break
 			case 'ArrowDown': this.selectNext(); break
 			case 'ArrowLeft': this.hideJumper(); break
 
 			default: return
 		}
-		if(e.preventDefault) e.preventDefault()
+		if($event.preventDefault) $event.preventDefault()
 		return false // prevent _
 	},
 
