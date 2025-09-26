@@ -2,7 +2,7 @@
 |Description|Adds an interface and hotkeys for jumping between tiddlers and more|
 |Source     |https://github.com/YakovL/TiddlyWiki_JumpKeysPlugin/blob/master/JumpKeysPlugin.js|
 |Author     |Yakov Litvin|
-|Version    |1.2.2|
+|Version    |1.2.3|
 |License    |[[MIT|https://github.com/YakovL/TiddlyWiki_YL_ExtensionsCollection/blob/master/Common%20License%20(MIT)]]|
 !!!Usage
 The plugin works more or less like the tab switching in a browser: press {{{ctrl + j}}} or the "jump" command in tiddler toolbar to open the jumping interface and:
@@ -15,6 +15,35 @@ As a development of the idea, it also supports hotkeys for some other actions on
 * {{{e}}} to edit it.
 ***/
 //{{{
+function isKeysMatch(event, hotkeyString) {
+	if(!event || !hotkeyString) return false
+
+	const modifierKeys = ['ctrl', 'alt', 'shift', 'meta']
+
+	const hotkey = {}
+    for(const mod of modifierKeys) hotkey[mod] = false
+	const parts = hotkeyString.split('+')
+	for(const part of parts) {
+        const maybeModifier = part.toLowerCase()
+        if(modifierKeys.includes(maybeModifier)) {
+            hotkey[maybeModifier] = true
+        } else {
+            // * if(hotkey.keycode) already, ... (throw? return false? { problem: 'invalid hotkeyString' }?)
+            hotkey.keycode = part.length != 1 ? part :
+                'Key' + part
+        }
+    }
+
+	for(const mod of modifierKeys) {
+        const hasEventMod = !!event[mod + 'Key']
+        const hasHotkeyMod = !!hotkey[mod]
+        if(hasEventMod != hasHotkeyMod) return false
+    }
+
+	return hotkey.keycode &&
+        event.code.toLowerCase() == hotkey.keycode.toLowerCase()
+}
+
 if(!config.jumper) config.jumper = {}
 merge(config.jumper, {
 	getOpenTiddlersData: function() {
