@@ -2,13 +2,16 @@
 |Description|Adds an interface and hotkeys for jumping between tiddlers and more|
 |Source     |https://github.com/YakovL/TiddlyWiki_JumpKeysPlugin/blob/master/JumpKeysPlugin.js|
 |Author     |Yakov Litvin|
-|Version    |1.2.3|
+|Version    |1.2.4|
 |License    |[[MIT|https://github.com/YakovL/TiddlyWiki_YL_ExtensionsCollection/blob/master/Common%20License%20(MIT)]]|
 !!!Usage
 The plugin works more or less like the tab switching in a browser: press {{{ctrl + j}}} or the "jump" command in tiddler toolbar to open the jumping interface and:
 * hold {{{ctrl}}} and press {{{j}}} or ↑/↓ arrows to select a tiddler (if more than one is open);
 * unhold {{{ctrl}}} or click a row to jump.
+This behavior can be switched off with {{{chkDisableJumper}}}: <<option chkDisableJumper>>
+
 It also substitutes the jump toolbar command dropdown with the same jumper interface.
+To restore the old behavior, check {{{chkKeepOriginalJumpCommand}}} <<option chkKeepOriginalJumpCommand>> and reload.
 
 As a development of the idea, it also supports hotkeys for some other actions on the tiddler, selected in the jumping interface. Currently, they are:
 * {{{x}}} to close the selected tiddler;
@@ -215,6 +218,7 @@ merge(config.jumper, {
 		this.hideJumper()
 	},
 	handleKeydown: function($event) {
+		if(config.options.chkDisableJumper) return
 		const self = config.jumper
 		if($event.key === 'Control') self.isCtrlHold = true
 		if(self.isCtrlHold) self.handleKeydownOnCtrlHold($event)
@@ -234,6 +238,7 @@ merge(config.jumper, {
 		}
 	},
 	handleKeyup: function($event) {
+		if(config.options.chkDisableJumper) return
 		const self = config.jumper
 
 		if($event.key === 'Control') {
@@ -242,11 +247,12 @@ merge(config.jumper, {
 			return
 		}
 
-		const normalizedKeyCode = !$event.originalEvent.code ? null :
-			/^(Key)?(\w+)$/.exec($event.originalEvent.code)[2].toLowerCase()
+		const keyCode = $event.originalEvent.code
+		const normalizedKeyCode = !keyCode ? null :
+			/^(Key)?(\w+)$/.exec(keyCode)[2].toLowerCase()
 
 		const commandsKeys = self.getCommandsKeys()
-		if(self.isCtrlHold && self.isJumperOpen() && normalizedKeyCode in commandsKeys) {
+		if(self.isJumperOpen() && self.isCtrlHold && normalizedKeyCode in commandsKeys) {
 
 			const index = self.getSelectedIndex()
 			self.callCommand(commandsKeys[normalizedKeyCode], index)
