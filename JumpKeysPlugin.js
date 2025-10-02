@@ -288,6 +288,7 @@ merge(config.jumper, {
 	},
 
 	substituteJumpCommand: function() {
+		if(config.options.chkKeepOriginalJumpCommand) return
 		config.commands.jump.type = null
 		config.commands.jump.handler = function() {
 			config.jumper.showJumper()
