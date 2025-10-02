@@ -2,7 +2,7 @@
 |Description|Adds an interface and hotkeys for jumping between tiddlers and more|
 |Source     |https://github.com/YakovL/TiddlyWiki_JumpKeysPlugin/blob/master/JumpKeysPlugin.js|
 |Author     |Yakov Litvin|
-|Version    |1.2.4|
+|Version    |1.2.5|
 |License    |[[MIT|https://github.com/YakovL/TiddlyWiki_YL_ExtensionsCollection/blob/master/Common%20License%20(MIT)]]|
 !!!Usage
 The plugin works more or less like the tab switching in a browser: press {{{ctrl + j}}} or the "jump" command in tiddler toolbar to open the jumping interface and:
@@ -225,8 +225,8 @@ merge(config.jumper, {
 	},
 	// next: make configurable via UI
 	defaultCommandsKeys: {
-		x: "closeTiddler",
-		e: "editTiddler"
+		closeTiddler: "KeyX",
+		editTiddler: "KeyE"
 	},
 	getCommandsKeys: function() {
 		const json = store.getTiddlerText('JumpKeysSettings')
@@ -248,14 +248,14 @@ merge(config.jumper, {
 		}
 
 		const keyCode = $event.originalEvent.code
-		const normalizedKeyCode = !keyCode ? null :
-			/^(Key)?(\w+)$/.exec(keyCode)[2].toLowerCase()
+		if(!self.isJumperOpen() || !keyCode) return
 
 		const commandsKeys = self.getCommandsKeys()
-		if(self.isJumperOpen() && self.isCtrlHold && normalizedKeyCode in commandsKeys) {
+		for(const cName in commandsKeys) {
+			if(!self.isCtrlHold || commandsKeys[cName].toLowerCase() != keyCode.toLowerCase()) continue
 
 			const index = self.getSelectedIndex()
-			self.callCommand(commandsKeys[normalizedKeyCode], index)
+			self.callCommand(cName, index)
 			const numberOfOpen = self.getOpenTiddlersData().length
 			if(numberOfOpen < 1) { // or < 2 ?
 				self.hideJumper()
@@ -297,7 +297,6 @@ merge(config.jumper, {
 })
 
 config.shadowTiddlers['JumpKeysStyleSheet'] = config.jumper.css
-config.shadowTiddlers['JumpKeysSettings'] = JSON.stringify(config.jumper.defaultCommandsKeys, null, 2)
 
 // reinstall-safe decorating and setting handlers
 if(!config.jumper.orig_story_displayTiddler) {
@@ -320,8 +319,26 @@ if(!config.jumper.orig_story_displayTiddler) {
 	//# doesn't seem to work anymore
 	window.addEventListener('blur', () => config.jumper.isCtrlHold = false)
 
+	for(const cName in config.jumper.defaultCommandsKeys) {
+		const command = config.commands[cName]
+		if(!command) continue
+		command.hotkeys = command.hotkeys || []
+		command.hotkeys.push({
+			scope: "jumper",
+			keys: config.jumper.defaultCommandsKeys[cName]
+		})
+	}
+
 	config.jumper.substituteJumpCommand()
 }
+const customizedCommandsKeys = {}
+for(const cName in config.commands) {
+	const command = config.commands[cName]
+	if(!command || !command.hotkeys) continue
+	const hotkey = command.hotkeys.find(h => h.scope == "jumper")
+	if(hotkey) customizedCommandsKeys[cName] = hotkey.keys
+}
+config.shadowTiddlers['JumpKeysSettings'] = JSON.stringify(customizedCommandsKeys, null, 2)
 
 // a very simplistic implementation:
 story.displayTiddler = function(srcElement, tiddler, template, animate, unused, customFields, toggle, animationSrc) {
