@@ -2,7 +2,7 @@
 |Description|Adds an interface and hotkeys for jumping between tiddlers and more|
 |Source     |https://github.com/YakovL/TiddlyWiki_JumpKeysPlugin/blob/master/JumpKeysPlugin.js|
 |Author     |Yakov Litvin|
-|Version    |1.2.5|
+|Version    |1.2.6|
 |License    |[[MIT|https://github.com/YakovL/TiddlyWiki_YL_ExtensionsCollection/blob/master/Common%20License%20(MIT)]]|
 !!!Usage
 The plugin works more or less like the tab switching in a browser: press {{{ctrl + j}}} or the "jump" command in tiddler toolbar to open the jumping interface and:
@@ -300,7 +300,7 @@ config.shadowTiddlers['JumpKeysStyleSheet'] = config.jumper.css
 
 // reinstall-safe decorating and setting handlers
 if(!config.jumper.orig_story_displayTiddler) {
-	config.jumper.orig_story_displayTiddler = story.displayTiddler
+	config.jumper.orig_story_displayTiddler = Story.prototype.displayTiddler
 	config.jumper.orig_editHandler = config.macros.edit.handler
 
 	store.addNotification('JumpKeysStyleSheet', refreshStyles)
@@ -341,7 +341,7 @@ for(const cName in config.commands) {
 config.shadowTiddlers['JumpKeysSettings'] = JSON.stringify(customizedCommandsKeys, null, 2)
 
 // a very simplistic implementation:
-story.displayTiddler = function(srcElement, tiddler, template, animate, unused, customFields, toggle, animationSrc) {
+Story.prototype.displayTiddler = function(srcElement, tiddler, template, animate, unused, customFields, toggle, animationSrc) {
 	config.jumper.pushTouchedTiddler({
 		title: (tiddler instanceof Tiddler) ? tiddler.title : tiddler
 		//# ...: template == DEFAULT_EDIT_TEMPLATE
